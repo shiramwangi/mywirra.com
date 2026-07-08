@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  /* 60% Canvas Background */
+  --color-surface-d: #1F2420;
+  /* 30% Container Backgrounds */
+  --color-surface-c: #2A302B; 
+  /* Text */
+  --color-surface-a: #FDFBF7;
+  /* 10% High-Priority CTA */
+  --color-action-highlight: #ffa066;
+}
+
+html {
+  /* Hardware-accelerated smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface-d);
+  color: var(--color-surface-a);
+  /* Prevents scrolling lag on modern viewports */
+  overscroll-behavior-y: none; 
+}
+
+/* Universal Accessibility: Strict Focus Rings */
+*:focus-visible {
+  outline: 2px solid var(--color-action-highlight);
+  outline-offset: 4px;
+  transition: outline-offset 0.2s ease;
+}

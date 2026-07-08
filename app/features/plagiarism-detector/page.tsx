@@ -1,0 +1,1 @@
+export default function plagiarismdetectorPage() { return ( <main className='pt-32 px-6 lg:px-24 max-w-7xl mx-auto min-h-screen flex items-center justify-center'> <h1 className='text-3xl font-bold text-action-highlight capitalize'>plagiarismdetector Route Active</h1> </main> ); }
