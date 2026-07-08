@@ -16,12 +16,13 @@ interface BetaWelcomeProps {
   firstName: string;
 }
 
-export const BetaWelcome = ({ firstName = "there" }: BetaWelcomeProps) => {
+export default function BetaWelcome({ firstName = "there" }: BetaWelcomeProps) {
   return (
     <Html>
-      <Head />
-      <Preview>Welcome to the Future of Hiring.</Preview>
+      {/* Tailwind must wrap Head so it can inject the <style> tags for hover states */}
       <Tailwind>
+        <Head />
+        <Preview>Welcome to the Future of Hiring.</Preview>
         <Body className="bg-[#2a2a2a] font-sans text-[#FDFBF7] my-auto mx-auto px-4 py-10">
           <Container className="border border-gray-700 rounded-2xl my-10 mx-auto p-10 max-w-xl bg-[#2a2a2a] shadow-2xl">
             
@@ -63,6 +64,4 @@ export const BetaWelcome = ({ firstName = "there" }: BetaWelcomeProps) => {
       </Tailwind>
     </Html>
   );
-};
-
-export default BetaWelcome;
+}

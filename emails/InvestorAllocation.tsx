@@ -21,17 +21,18 @@ interface InvestorAllocationProps {
   equityPercent: string;
 }
 
-export const InvestorAllocation = ({
+export default function InvestorAllocation({
   investorName = "Investor",
   shares = "10",
   amount = "50",
   equityPercent = "0.01",
-}: InvestorAllocationProps) => {
+}: InvestorAllocationProps) {
   return (
     <Html>
-      <Head />
-      <Preview>Your Allocation is Confirmed.</Preview>
+      {/* Tailwind wraps Head & Body for inline style injection */}
       <Tailwind>
+        <Head />
+        <Preview>Your Allocation is Confirmed.</Preview>
         <Body className="bg-[#2a2a2a] font-sans text-[#FDFBF7] my-auto mx-auto px-4 py-10">
           <Container className="border border-gray-700 rounded-2xl my-10 mx-auto p-10 max-w-xl bg-[#2a2a2a] shadow-2xl">
             
@@ -107,6 +108,4 @@ export const InvestorAllocation = ({
       </Tailwind>
     </Html>
   );
-};
-
-export default InvestorAllocation;
+}

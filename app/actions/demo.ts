@@ -3,6 +3,7 @@
 import crypto from "crypto";
 import { Resend } from "resend";
 import BetaWelcome from '@/emails/BetaWelcome';
+import { render } from "@react-email/render";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -10,11 +11,24 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 async function getGoogleAuthToken() {
   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   
-  // CRITICAL FIX: Sanitize the private key by converting literal \n characters back into actual line breaks
-  const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+  if (!privateKey) throw new Error("GOOGLE_PRIVATE_KEY is missing.");
 
-  if (!clientEmail || !privateKey) {
-    throw new Error("GOOGLE_PRIVATE_KEY is missing or invalid, or Google Service Account credentials are not set.");
+  // 1. Strip literal quotes
+  privateKey = privateKey.replace(/^"|"$/g, '');
+  // 2. Convert literal \n
+  privateKey = privateKey.replace(/\\n/g, '\n');
+  // 3. Fallback PEM rebuild
+  if (!privateKey.includes('\n')) {
+    privateKey = privateKey.replace('-----BEGIN PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----\n');
+    privateKey = privateKey.replace('-----END PRIVATE KEY-----', '\n-----END PRIVATE KEY-----\n');
+    const body = privateKey.replace('-----BEGIN PRIVATE KEY-----\n', '').replace('\n-----END PRIVATE KEY-----\n', '').replace(/\s+/g, '');
+    const formattedBody = body.match(/.{1,64}/g)?.join('\n') || body;
+    privateKey = `-----BEGIN PRIVATE KEY-----\n${formattedBody}\n-----END PRIVATE KEY-----\n`;
+  }
+
+  if (!clientEmail) {
+    throw new Error("GOOGLE_CLIENT_EMAIL is missing.");
   }
 
   const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
@@ -56,6 +70,9 @@ async function getGoogleAuthToken() {
 export async function submitDemoRequest(formData: FormData, isRecruiter: boolean) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
+  const phone = formData.get("phone") as string;
+  const country = formData.get("country") as string;
+  const timestamp = new Date().toISOString().split('T')[0];
   
   // Dynamically map values based on the role structure
   let values: string[] = [];
@@ -64,31 +81,36 @@ export async function submitDemoRequest(formData: FormData, isRecruiter: boolean
     values = [
       name, 
       email, 
-      "Recruiter",
+      phone,
+      country,
       formData.get("company") as string || "N/A",
       formData.get("role") as string || "N/A",
+      formData.get("companySize") as string || "N/A",
       formData.get("challenges") as string || "N/A",
-      formData.get("timeToHire") as string || "N/A",
-      formData.get("aiRole") as string || "N/A"
+      timestamp
     ];
   } else {
     values = [
       name, 
       email, 
-      "Candidate",
+      phone,
+      country,
       formData.get("field") as string || "N/A",
       formData.get("industry") as string || "N/A",
       formData.get("level") as string || "N/A",
-      formData.get("goal") as string || "N/A"
+      timestamp
     ];
   }
 
   try {
     // 1. Google Sheets Insertion
     const token = await getGoogleAuthToken();
-    const sheetId = process.env.GOOGLE_SHEET_BETA_ID;
+    const sheetId = process.env.GOOGLE_BETA_SHEET_ID;
     
-    const sheetsResponse = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:append?valueInputOption=USER_ENTERED`, {
+    // Tab dynamic mapping
+    const tabRange = isRecruiter ? "Recruiters!A1:append" : "Candidates!A1:append";
+    
+    const sheetsResponse = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${tabRange}?valueInputOption=USER_ENTERED`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -104,12 +126,15 @@ export async function submitDemoRequest(formData: FormData, isRecruiter: boolean
       throw new Error("Failed to append to Google Sheets.");
     }
 
-    // 2. Resend Email Delivery using React Email
+    // 2. Pre-compile the React Email template
+    const emailHtml = await render(BetaWelcome({ firstName: name }));
+
+    // 3. Resend Email Delivery
     await resend.emails.send({
-      from: "Wirra <hello@mywirra.com>", // Use your verified domain
+      from: "Wirra <hello@mywirra.com>",
       to: email,
       subject: "Welcome to the Future of Hiring",
-      react: BetaWelcome({ firstName: name }),
+      html: emailHtml,
     });
 
     return { success: true };
