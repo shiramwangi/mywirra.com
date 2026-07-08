@@ -1,15 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// 1. Added Transition to the import
-import { motion, AnimatePresence, Transition } from "framer-motion";
-
-const CONFIG = {
-  speed: 2,              // Slightly slower spin for a calmer, premium feel
-  strokeWidth: 4,        // Clean, legible thickness
-  style: "fluid",        // Smooth acceleration/deceleration
-  glow: true,            // Active glow accent
-};
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,70 +13,57 @@ export default function Preloader() {
     return () => clearTimeout(timer);
   }, []);
 
-  // 2. Explicitly typed this object as a Framer Motion Transition
-  const spinTransition: Transition = {
-    repeat: Infinity,
-    ease: CONFIG.style === "fluid" ? "easeInOut" : "linear",
-    duration: CONFIG.speed,
-  };
-
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          // UPDATED: Only opacity for a slow, elegant dissolve. No upward movement.
           exit={{ opacity: 0 }}
           transition={{
-            duration: 1.2, // Extended duration for the "slow fade"
+            duration: 1.2,
             ease: "easeInOut",
           }}
-          // UPDATED: Pure white background
           className="fixed inset-0 z-50 flex items-center justify-center bg-white"
         >
+          {/* THE SNAKISH MORPH:
+            By animating 8 distinct percentage values on the border-radius, 
+            we create an organic, wriggling shape with perfectly curved points.
+            It behaves like a fluid or a coiled snake rather than a strict polygon.
+          */}
+          <style>{`
+            @keyframes snakish-blob {
+              0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+              25%  { border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%; }
+              50%  { border-radius: 80% 20% 50% 50% / 80% 25% 75% 20%; }
+              75%  { border-radius: 25% 75% 80% 20% / 50% 20% 80% 50%; }
+              100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            }
+            .morph-snakish {
+              animation: snakish-blob 2.5s ease-in-out infinite;
+            }
+          `}</style>
+
           <div className="relative flex items-center justify-center w-32 h-32">
             
-            {/* Glow Accent */}
-            {CONFIG.glow && (
-              <div className="absolute inset-0 rounded-full bg-action-highlight/20 blur-xl animate-pulse" />
-            )}
+            {/* Soft background pulse */}
+            <div className="absolute inset-0 rounded-full bg-action-highlight/20 blur-xl animate-pulse" />
 
-            <svg
-              viewBox="0 0 50 50"
-              className="w-16 h-16 transform -rotate-90"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Background Track - Lightened for the white background */}
-              <circle
-                cx="25"
-                cy="25"
-                r="20"
-                fill="none"
-                className="stroke-gray-100"
-                strokeWidth={CONFIG.strokeWidth}
-              />
-
-              {/* Segmented Active Track */}
-              <motion.circle
-                cx="25"
-                cy="25"
-                r="20"
-                fill="none"
-                className="stroke-action-highlight"
-                strokeWidth={CONFIG.strokeWidth}
-                strokeLinecap="round"
-                // UPDATED: Creates the segmented dashed look (30px line, 10px gap)
-                strokeDasharray="30 15" 
-                animate={{ 
-                  strokeDashoffset: [0, -125], // Pushes the segments continuously
-                  rotate: [0, 360] 
-                }}
-                transition={{
-                  strokeDashoffset: spinTransition,
-                  rotate: spinTransition
-                }}
-                style={{ originX: "25px", originY: "25px" }}
-              />
-            </svg>
+            {/* THE ACTIVE INDICATOR */}
+            <motion.div
+              // Replaced the polygon class with our new curved class
+              className="w-16 h-16 bg-action-highlight morph-snakish shadow-sm"
+              animate={{ 
+                rotate: [0, 90, 180, 270, 360],
+                // Added a slightly deeper scale breath to accentuate the "alive" feel
+                scale: [1, 0.9, 1.1, 0.9, 1] 
+              }}
+              transition={{
+                duration: 4, 
+                ease: "linear",
+                repeat: Infinity,
+              }}
+              style={{ originX: 0.5, originY: 0.5 }}
+            />
+            
           </div>
         </motion.div>
       )}
