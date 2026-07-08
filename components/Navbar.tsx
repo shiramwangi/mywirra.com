@@ -25,7 +25,7 @@ const NAV_DATA = {
     ],
   },
   company: [
-    { name: "About Us", href: "/company/about" },
+    { name: "Who we are", href: "/company/who-we-are" },
     { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/company/contact" },
     { name: "Careers", href: "/company/careers" },
