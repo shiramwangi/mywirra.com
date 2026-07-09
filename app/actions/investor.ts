@@ -3,35 +3,30 @@
 import crypto from "crypto";
 import { Resend } from "resend";
 import InvestorAllocation from '@/emails/InvestorAllocation';
+import { render } from "@react-email/render";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Helper function to generate a Google OAuth 2.0 Bearer Token using JWT
 async function getGoogleAuthToken() {
-let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+  
+  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+
+  // Vercel Serverless Fix: Check for Base64 encoded key first
+  if (process.env.GOOGLE_PRIVATE_KEY_BASE64) {
+    privateKey = Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8');
+  } else if (privateKey) {
+    // Fallback for local development if Base64 isn't set
+    privateKey = privateKey.replace(/^"|"$/g, '').replace(/\\n/g, '\n');
+  }
 
   if (!privateKey) {
-    throw new Error("GOOGLE_PRIVATE_KEY is missing or invalid.");
+    throw new Error("Google Private Key is missing from environment variables.");
   }
 
-  const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   if (!clientEmail) {
     throw new Error("GOOGLE_CLIENT_EMAIL is missing.");
-  }
-
-  // 1. Strip literal surrounding quotes injected by .env parsers
-  privateKey = privateKey.replace(/^"|"$/g, '');
-  
-  // 2. Convert literal "\n" text into actual architectural line breaks
-  privateKey = privateKey.replace(/\\n/g, '\n');
-  
-  // 3. Absolute Fallback: Rebuild PEM format if completely flattened
-  if (!privateKey.includes('\n')) {
-    privateKey = privateKey.replace('-----BEGIN PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----\n');
-    privateKey = privateKey.replace('-----END PRIVATE KEY-----', '\n-----END PRIVATE KEY-----\n');
-    const body = privateKey.replace('-----BEGIN PRIVATE KEY-----\n', '').replace('\n-----END PRIVATE KEY-----\n', '').replace(/\s+/g, '');
-    const formattedBody = body.match(/.{1,64}/g)?.join('\n') || body;
-    privateKey = `-----BEGIN PRIVATE KEY-----\n${formattedBody}\n-----END PRIVATE KEY-----\n`;
   }
 
   const header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString("base64url");
@@ -99,17 +94,22 @@ export async function submitInvestorApplication(formData: FormData) {
       throw new Error("Failed to append to Google Sheets.");
     }
 
-    // 2. Resend Email Delivery
-    await resend.emails.send({
-      from: "Wirra Investor Relations <investors@mywirra.com>", // Use your verified domain
-      to: email,
-      subject: "Welcome to the Wirra Investor Network",
-      react: InvestorAllocation({ 
+    // 2. Pre-compile the React Email template
+    const emailHtml = await render(
+      InvestorAllocation({ 
         investorName: name, 
         shares: shares, 
         amount: amount, 
         equityPercent: ((Number(shares) / 1000) * 1).toFixed(2) 
-      }),
+      })
+    );
+
+    // 3. Resend Email Delivery
+    await resend.emails.send({
+      from: "Wirra Investor Relations <investors@mywirra.com>", // Use your verified domain
+      to: email,
+      subject: "Welcome to the Wirra Investor Network",
+      html: emailHtml,
     });
 
     return { success: true };

@@ -12,19 +12,17 @@ async function getGoogleAuthToken() {
   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   
   let privateKey = process.env.GOOGLE_PRIVATE_KEY;
-  if (!privateKey) throw new Error("GOOGLE_PRIVATE_KEY is missing.");
 
-  // 1. Strip literal quotes
-  privateKey = privateKey.replace(/^"|"$/g, '');
-  // 2. Convert literal \n
-  privateKey = privateKey.replace(/\\n/g, '\n');
-  // 3. Fallback PEM rebuild
-  if (!privateKey.includes('\n')) {
-    privateKey = privateKey.replace('-----BEGIN PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----\n');
-    privateKey = privateKey.replace('-----END PRIVATE KEY-----', '\n-----END PRIVATE KEY-----\n');
-    const body = privateKey.replace('-----BEGIN PRIVATE KEY-----\n', '').replace('\n-----END PRIVATE KEY-----\n', '').replace(/\s+/g, '');
-    const formattedBody = body.match(/.{1,64}/g)?.join('\n') || body;
-    privateKey = `-----BEGIN PRIVATE KEY-----\n${formattedBody}\n-----END PRIVATE KEY-----\n`;
+  // Vercel Serverless Fix: Check for Base64 encoded key first
+  if (process.env.GOOGLE_PRIVATE_KEY_BASE64) {
+    privateKey = Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8');
+  } else if (privateKey) {
+    // Fallback for local development if Base64 isn't set
+    privateKey = privateKey.replace(/^"|"$/g, '').replace(/\\n/g, '\n');
+  }
+
+  if (!privateKey) {
+    throw new Error("Google Private Key is missing from environment variables.");
   }
 
   if (!clientEmail) {

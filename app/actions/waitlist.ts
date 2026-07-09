@@ -8,14 +8,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function joinWaitlist(email: string, role: string, company?: string) {
   try {
-    // 1. The Ultimate Sanitization Chain
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY
-      ? process.env.GOOGLE_PRIVATE_KEY
-          .replace(/\\n/g, '\n') // 1. Convert escaped newlines
-          .replace(/\r/g, '')    // 2. CRITICAL: Strip Windows carriage returns
-          .replace(/^"|"$/g, '') // 3. Strip accidental wrapping quotes
-          .trim()                // 4. Strip leading/trailing whitespace
-      : undefined;
+    // 1. The Ultimate Sanitization Chain (Vercel Serverless Ready)
+    let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+
+    if (process.env.GOOGLE_PRIVATE_KEY_BASE64) {
+      privateKey = Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8');
+    } else if (privateKey) {
+      privateKey = privateKey
+        .replace(/\\n/g, '\n') // 1. Convert escaped newlines
+        .replace(/\r/g, '')    // 2. CRITICAL: Strip Windows carriage returns
+        .replace(/^"|"$/g, '') // 3. Strip accidental wrapping quotes
+        .trim();               // 4. Strip leading/trailing whitespace
+    }
 
     // 2. Safe Telemetry Logging
     if (privateKey) {
