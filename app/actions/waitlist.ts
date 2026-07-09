@@ -9,17 +9,22 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function joinWaitlist(email: string, role: string, company?: string) {
   try {
     // 1. The Ultimate Sanitization Chain (Vercel Serverless Ready)
-    let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+    let privateKey = process.env.GOOGLE_PRIVATE_KEY_BASE64 
+  ? Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8')
+  : process.env.GOOGLE_PRIVATE_KEY;
 
-    if (process.env.GOOGLE_PRIVATE_KEY_BASE64) {
-      privateKey = Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8');
-    } else if (privateKey) {
-      privateKey = privateKey
-        .replace(/\\n/g, '\n') // 1. Convert escaped newlines
-        .replace(/\r/g, '')    // 2. CRITICAL: Strip Windows carriage returns
-        .replace(/^"|"$/g, '') // 3. Strip accidental wrapping quotes
-        .trim();               // 4. Strip leading/trailing whitespace
-    }
+// 2. Universal Sanitization (Catches literal \n from both Base64 and raw strings)
+if (privateKey) {
+  privateKey = privateKey
+    .replace(/\\n/g, '\n') // Convert literal \n to actual invisible line breaks
+    .replace(/\r/g, '')    // Strip Windows carriage returns
+    .replace(/^"|"$/g, '') // Strip wrapping quotes
+    .trim();               // Strip leading/trailing whitespace
+}
+
+if (!privateKey) {
+  throw new Error("Google Private Key is missing from environment variables.");
+}
 
     // 2. Safe Telemetry Logging
     if (privateKey) {

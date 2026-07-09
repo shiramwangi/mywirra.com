@@ -11,19 +11,22 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 async function getGoogleAuthToken() {
   const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
   
-  let privateKey = process.env.GOOGLE_PRIVATE_KEY;
+  let privateKey = process.env.GOOGLE_PRIVATE_KEY_BASE64 
+  ? Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8')
+  : process.env.GOOGLE_PRIVATE_KEY;
 
-  // Vercel Serverless Fix: Check for Base64 encoded key first
-  if (process.env.GOOGLE_PRIVATE_KEY_BASE64) {
-    privateKey = Buffer.from(process.env.GOOGLE_PRIVATE_KEY_BASE64, 'base64').toString('utf-8');
-  } else if (privateKey) {
-    // Fallback for local development if Base64 isn't set
-    privateKey = privateKey.replace(/^"|"$/g, '').replace(/\\n/g, '\n');
-  }
+// 2. Universal Sanitization (Catches literal \n from both Base64 and raw strings)
+if (privateKey) {
+  privateKey = privateKey
+    .replace(/\\n/g, '\n') // Convert literal \n to actual invisible line breaks
+    .replace(/\r/g, '')    // Strip Windows carriage returns
+    .replace(/^"|"$/g, '') // Strip wrapping quotes
+    .trim();               // Strip leading/trailing whitespace
+}
 
-  if (!privateKey) {
-    throw new Error("Google Private Key is missing from environment variables.");
-  }
+if (!privateKey) {
+  throw new Error("Google Private Key is missing from environment variables.");
+}
 
   if (!clientEmail) {
     throw new Error("GOOGLE_CLIENT_EMAIL is missing.");
