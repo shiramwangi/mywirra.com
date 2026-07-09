@@ -200,7 +200,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* DESKTOP CTA */}
         {/* DESKTOP CTA (Dropdown) */}
         <div 
           className="hidden lg:flex items-center relative h-20"
@@ -298,13 +297,13 @@ export default function Navbar() {
                       <div className="flex flex-col gap-4">
                         <span className="text-[11px] font-bold tracking-widest uppercase text-gray-400">Products</span>
                         {NAV_DATA.product.products.map((item, idx) => (
-                          <Link key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
+                          <Link onClick={() => setIsMobileOpen(false)} key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
                         ))}
                       </div>
                       <div className="flex flex-col gap-4">
                         <span className="text-[11px] font-bold tracking-widest uppercase text-gray-400">Features</span>
                         {NAV_DATA.product.features.map((item, idx) => (
-                          <Link key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
+                          <Link onClick={() => setIsMobileOpen(false)} key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
                         ))}
                       </div>
                     </motion.div>
@@ -332,7 +331,7 @@ export default function Navbar() {
                       className="overflow-hidden flex flex-col gap-4 mt-6 pl-4"
                     >
                       {NAV_DATA.company.map((item, idx) => (
-                        <Link key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
+                        <Link onClick={() => setIsMobileOpen(false)} key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
                       ))}
                     </motion.div>
                   )}
@@ -359,7 +358,7 @@ export default function Navbar() {
                       className="overflow-hidden flex flex-col gap-4 mt-6 pl-4"
                     >
                       {NAV_DATA.solutions.map((item, idx) => (
-                        <Link key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
+                        <Link onClick={() => setIsMobileOpen(false)} key={idx} href={item.href} className="text-lg font-medium text-[#1F2420]">{item.name}</Link>
                       ))}
                     </motion.div>
                   )}
@@ -367,17 +366,50 @@ export default function Navbar() {
               </div>
 
               {/* Direct Mobile Links */}
-              <Link href="/early-contributors/recruiter" className="text-2xl font-normal text-[#1F2420] py-2">
+              <Link href="/early-contributors/recruiter" onClick={() => setIsMobileOpen(false)} className="text-2xl font-normal text-[#1F2420] py-2">
                 For Recruiters
               </Link>
-              <Link href="/early-contributors/candidate" className="text-2xl font-normal text-[#1F2420] py-2 border-b border-[#1F2420]/10 pb-6">
+              <Link href="/early-contributors/candidate" onClick={() => setIsMobileOpen(false)} className="text-2xl font-normal text-[#1F2420] py-2">
                 For Candidates
               </Link>
 
-              {/* Mobile CTA */}
-              <Link href="/contact" className="mt-8 px-8 py-4 w-full bg-[#1F2420] text-center text-white rounded-full text-lg font-medium hover:bg-[#F49B36] transition-colors">
-                Request Demo
-              </Link>
+              {/* Mobile CTA (Accordion Style) */}
+              <div className="mt-4 border-t border-[#1F2420]/10 pt-8 pb-8">
+                <button 
+                  onClick={() => toggleAccordion("demo")}
+                  className="w-full px-8 py-4 bg-[#1F2420] text-center text-white rounded-full text-lg font-medium hover:bg-[#F49B36] transition-colors flex justify-center items-center gap-2"
+                >
+                  Request Demo
+                  <motion.div animate={{ rotate: activeMobileAccordion === "demo" ? 180 : 0 }}>
+                    <ChevronDown className="w-5 h-5" />
+                  </motion.div>
+                </button>
+                <AnimatePresence>
+                  {activeMobileAccordion === "demo" && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden flex flex-col gap-3 mt-4"
+                    >
+                      <Link 
+                        href="/demo/recruiters" 
+                        onClick={() => setIsMobileOpen(false)}
+                        className="w-full px-6 py-4 bg-gray-100 text-[#1F2420] rounded-xl text-center font-medium hover:bg-gray-200 transition-colors"
+                      >
+                        For Recruiters
+                      </Link>
+                      <Link 
+                        href="/demo/candidates" 
+                        onClick={() => setIsMobileOpen(false)}
+                        className="w-full px-6 py-4 bg-gray-100 text-[#1F2420] rounded-xl text-center font-medium hover:bg-gray-200 transition-colors"
+                      >
+                        For Candidates
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
             </div>
           </motion.div>
