@@ -229,7 +229,7 @@ export default function InvestorsPage() {
             /* Cal.com Embed */
             <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-700">
               <Cal 
-                calLink="mwangi-chiira-7k6n2b/investor-briefing-wirra" 
+                calLink="https://cal.com/mywirra-zrh78w/investor-network" 
                 style={{ width: "100%", height: "100%", overflow: "scroll" }}
                 config={{ layout: "month_view" }}
               />
