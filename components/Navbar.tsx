@@ -80,7 +80,7 @@ export default function Navbar() {
           className="text-3xl tracking-tight flex items-baseline z-50 relative outline-none" 
           style={{ fontFamily: "'Poppins', sans-serif" }}
         >
-          <span className="font-normal text-[#1F2420]">wirra</span>
+          <span className="font-medium text-[#1F2420]">wirra</span>
           <span className="font-bold text-[#F49B36]">.</span>
         </Link>
 

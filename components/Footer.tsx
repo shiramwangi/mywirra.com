@@ -60,7 +60,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-2 flex flex-col gap-6">
             <Link href="/" className="inline-block outline-none focus-visible:ring-2 focus-visible:ring-[#ffa066] rounded-sm w-max">
               <span className={`${poppins.className} text-3xl tracking-tight`}>
-                Wirra<span className="text-[#ffa066] font-medium">.</span>
+                wirra<span className="text-[#ffa066] font-extrabold">.</span>
               </span>
             </Link>
             <p className="text-sm text-[#FDFBF7]/70 max-w-xs leading-relaxed">

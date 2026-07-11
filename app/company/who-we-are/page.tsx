@@ -1,4 +1,5 @@
 import React from "react";
+import NewsletterCanvas from "@/components/NewsLetterCanvas";
 
 export default function WhoWeArePage() {
   return (
@@ -230,6 +231,8 @@ export default function WhoWeArePage() {
 
         </div>
       </section>
+
+      <NewsletterCanvas />
     </div>
   );
 }
