@@ -225,7 +225,6 @@ export default function CareersPage() {
       </section>
 
       {/* Canvas 4: Bottom Hook (Orange) */}
-      {/* Canvas 4: Bottom Hook (Orange) */}
       <section className="w-[calc(100%-1.5rem)] md:w-[calc(100%-2.5rem)] max-w-[1600px] mx-auto bg-[#F49B36] text-[#1F2420] rounded-none mt-0 py-24 md:py-32 px-6 md:px-12 lg:px-20 relative overflow-hidden shadow-2xl">
         
         {/* Massive Right-Aligned Watermark */}
@@ -238,8 +237,8 @@ export default function CareersPage() {
         <div className="max-w-[1400px] mx-auto relative z-10 flex flex-col">
           <div className="max-w-xl">
             
-            <h2 className="text-6xl md:text-7xl font-medium tracking-tight leading-[1.1] mb-12">
-              Secure Talent, <br /> Seamlessly.
+            <h2 className="text-5xl md:text-5xl font-medium tracking-tight leading-[1.1] mb-6">
+              Secure Talent, Seamlessly.
             </h2>
             
             <hr className="border-t-[2px] border-[#1F2420]/20 w-full mb-10" />
