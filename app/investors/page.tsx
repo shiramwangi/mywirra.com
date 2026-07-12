@@ -55,8 +55,8 @@ export default function InvestorsPage() {
 
   {/* Poppins Logo */}
   <Link href="/" className="text-3xl tracking-tight flex items-baseline" style={{ fontFamily: "'Poppins', sans-serif" }}>
-    <span className="font-extralight text-[#1F2420]">Wirra</span>
-    <span className="font-semibold text-[#F49B36]">.</span>
+    <span className="font-normal text-[#1F2420]">wirra</span>
+    <span className="font-bold text-[#F49B36]">.</span>
   </Link>
 
   {/* Back Button */}
