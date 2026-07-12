@@ -38,7 +38,7 @@ export default function NewsletterCanvas() {
         {/* Left Side: Content & Form */}
         <div className="flex flex-col items-start max-w-xl">
           <h2 className="text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tighter leading-[1] mb-8">
-            Curated Insight <br /> and Resources.
+            Curated Insight and Resources.
           </h2>
           
           <h3 className="text-xl md:text-2xl font-bold leading-snug mb-8">
