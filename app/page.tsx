@@ -145,7 +145,7 @@ export default function Home() {
                 {/* Trigger Element */}
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-full inline-flex items-center justify-center px-10 py-3.5 xl:px-12 xl:py-4 bg-[#292C26] text-[#F5F6F5] rounded-full text-2xl xl:text-[1.75rem] font-normal tracking-tight transition-colors duration-300 hover:bg-[#788170] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#99F53C] focus-visible:ring-[#292C26]"
+                  className="px-12 py-5 font-semibold text-lg lg:text-xl rounded-full inline-block text-center w-full sm:w-auto transition-all duration-200 bg-[#2a2a2a] text-[#f1f1f1] border-2 border-[#2a2a2a] hover:bg-transparent hover:text-[#2a2a2a] hover:border-[#2a2a2a] active:bg-[#FDFBF7] active:text-[#2a2a2a] active:scale-95"
                 >
                   Get started now
                 </button>
