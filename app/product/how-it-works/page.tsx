@@ -160,45 +160,51 @@ export default function RecruitingProductPage() {
           <img 
             src="https://cdn.prod.website-files.com/6489090bd5636759fdc111b8/64890a00ea4cadddb8c93957_graphic-07.png" 
             alt="" 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[800px] h-[80vh] object-contain opacity-[0.04] pointer-events-none z-0 mix-blend-multiply" 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[80vw] max-w-[800px] h-[80vh] object-contain opacity-[0.04] pointer-events-none z-0 mix-blend-multiply" 
           />
 
-          {/* Updated Typography Header */}
-          <div className="absolute top-16 left-12 md:left-20 text-[#1F2420] z-20">
-            <h2 className="text-5xl md:text-7xl font-medium tracking-tighter leading-[1.05] mb-4 max-w-3xl">
-              Revolutionize Your <br /> Hiring Process.
+          {/* Updated Typography Header - Pushed up on mobile (top-8) and sized down so it clears the cards */}
+          <div className="absolute top-8 sm:top-12 md:top-16 left-6 md:left-20 pr-6 text-[#1F2420] z-20">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium tracking-tighter leading-[1.05] mb-2 md:mb-4 max-w-3xl">
+              Revolutionize Your <br className="hidden sm:block" /> Hiring Process.
             </h2>
-            <p className="font-medium text-[#1F2420]/60 text-lg">Scroll or click next to explore the pipeline &rarr;</p>
+            <p className="font-medium text-[#1F2420]/60 text-sm md:text-lg">Scroll or click next to explore the pipeline &rarr;</p>
           </div>
 
-          <motion.div style={{ x }} className="flex gap-12 md:gap-20 px-12 md:px-20 mt-32 items-center z-10">
+          {/* Pushed down on mobile (mt-48) so the track passes safely *under* the text without touching */}
+          <motion.div style={{ x }} className="flex gap-6 md:gap-20 px-6 md:px-20 mt-48 sm:mt-48 md:mt-32 items-center z-10">
             {RECRUITING_STEPS.map((step) => (
               <div 
                 key={step.id} 
-                className="group relative w-[380px] md:w-[480px] h-[660px] flex flex-col bg-[#FDFBF7] border-2 border-[#1F2420]/80 shadow-[6px_6px_0px_0px_#1F2420] rounded-2xl overflow-hidden flex-shrink-0 transition-shadow duration-300 hover:shadow-[8px_8px_0px_0px_#F49B36]"
+                
+                className="group relative w-[85vw] sm:w-[380px] md:w-[480px] h-[520px] sm:h-[600px] md:h-[660px] flex flex-col bg-[#FDFBF7] border-2 border-[#1F2420]/80 shadow-[6px_6px_0px_0px_#1F2420] rounded-2xl overflow-hidden flex-shrink-0 transition-shadow duration-300 hover:shadow-[8px_8px_0px_0px_#F49B36]"
               >
                 {/* TOP HALF: Interactive UI Modals */}
-                <div className="h-[45%] w-full border-b-2 border-[#1F2420]/80 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] bg-[#FDFBF7] relative overflow-hidden flex items-center justify-center p-6">
-                   <div className="absolute top-4 left-4 bg-[#F49B36] text-[#1F2420] px-3 py-1 text-lg font-bold border-2 border-[#1F2420] rounded-lg z-20 shadow-[2px_2px_0px_0px_#1F2420]">
+                <div className="h-[40%] md:h-[45%] w-full border-b-2 border-[#1F2420]/80 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] bg-[#FDFBF7] relative overflow-hidden flex items-center justify-center p-4 md:p-6">
+                   <div className="absolute top-3 md:top-4 left-3 md:left-4 bg-[#F49B36] text-[#1F2420] px-3 py-1 text-sm md:text-lg font-bold border-2 border-[#1F2420] rounded-lg z-20 shadow-[2px_2px_0px_0px_#1F2420]">
                      {step.id}
                    </div>
-                   {step.uiMock}
+                   {/* Scales down the UI mocks smoothly so they don't break the smaller card */}
+                   <div className="scale-[0.8] sm:scale-90 md:scale-100 origin-center">
+                     {step.uiMock}
+                   </div>
                 </div>
                 
                 {/* BOTTOM HALF: Text & Actions */}
-                <div className="h-[55%] p-8 flex flex-col justify-between bg-[#FDFBF7]">
+                <div className="h-[60%] md:h-[55%] p-5 md:p-8 flex flex-col justify-between bg-[#FDFBF7]">
                   <div>
-                    <h3 className="text-3xl font-bold text-[#1F2420] tracking-tight mb-4">{step.title}</h3>
-                    <p className="text-base md:text-lg text-[#1F2420]/80 font-medium leading-relaxed">{step.description}</p>
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#1F2420] tracking-tight mb-2 md:mb-4">{step.title}</h3>
+                    {/* Line clamp ensures long text doesn't blow out the card on small phones */}
+                    <p className="text-sm md:text-lg text-[#1F2420]/80 font-medium leading-relaxed line-clamp-3 md:line-clamp-none">{step.description}</p>
                   </div>
                   
                   {/* Universal Routing Buttons (Round Method) & Scroll Arrow */}
-                  <div className="flex flex-col gap-4 mt-6">
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Link href="/demo/recruiters" className="flex-1 flex justify-center items-center px-4 py-3.5 bg-[#1F2420] text-[#FDFBF7] border-2 border-[#1F2420] rounded-full font-bold hover:bg-transparent hover:text-[#1F2420] transition-colors whitespace-nowrap shadow-sm">
+                  <div className="flex flex-col gap-2 md:gap-4 mt-4 md:mt-6">
+                    <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
+                      <Link href="/demo/recruiters" className="flex-1 flex justify-center items-center px-4 py-2.5 md:py-3.5 bg-[#1F2420] text-[#FDFBF7] border-2 border-[#1F2420] rounded-full font-bold text-sm md:text-base hover:bg-transparent hover:text-[#1F2420] transition-colors whitespace-nowrap shadow-sm">
                         Request Demo
                       </Link>
-                      <Link href="/pricing" className="flex-1 flex justify-center items-center px-4 py-3.5 bg-transparent text-[#1F2420] border-2 border-[#1F2420] rounded-full font-bold hover:bg-[#F49B36] transition-colors whitespace-nowrap shadow-sm">
+                      <Link href="/pricing" className="flex-1 flex justify-center items-center px-4 py-2.5 md:py-3.5 bg-transparent text-[#1F2420] border-2 border-[#1F2420] rounded-full font-bold text-sm md:text-base hover:bg-[#F49B36] transition-colors whitespace-nowrap shadow-sm">
                         See Pricing
                       </Link>
                     </div>
@@ -206,10 +212,10 @@ export default function RecruitingProductPage() {
                     {/* Programmatic Next Scroll Action */}
                     <button 
                       onClick={() => window.scrollBy({ top: window.innerHeight * 0.75, behavior: 'smooth' })}
-                      className="flex items-center justify-center gap-2 w-full py-2 text-[#1F2420]/60 font-bold hover:text-[#F49B36] transition-colors group/btn"
+                      className="flex items-center justify-center gap-2 w-full py-1.5 md:py-2 text-[#1F2420]/60 font-bold text-sm md:text-base hover:text-[#F49B36] transition-colors group/btn"
                     >
                       Next Feature 
-                      <span className="text-xl group-hover/btn:translate-x-1 transition-transform">&rarr;</span>
+                      <span className="text-lg md:text-xl group-hover/btn:translate-x-1 transition-transform">&rarr;</span>
                     </button>
                   </div>
 
