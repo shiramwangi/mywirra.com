@@ -93,7 +93,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h4 className="font-semibold text-sm tracking-wide text-[#FDFBF7]">Company</h4>
             <ul className="flex flex-col gap-3">
-              <FooterLink href="/about">Who We Are</FooterLink>
+              <FooterLink href="/company/who-we-are">Who We Are</FooterLink>
               <FooterLink href="/why-wirra">Why Wirra</FooterLink>
               <FooterLink href="/customers">Customers</FooterLink>
             </ul>
@@ -105,7 +105,7 @@ export default function Footer() {
               <FooterLink href="/product/how-it-works">How It Works</FooterLink>
               <FooterLink href="/pricing">Pricing</FooterLink>
               <FooterLink href="/investors">Investor Network</FooterLink>
-              <FooterLink href="/beta">Beta Access</FooterLink>
+              <FooterLink href="/demo/recruiters">Beta Access</FooterLink>
             </ul>
           </div>
 
@@ -122,8 +122,8 @@ export default function Footer() {
             <h4 className="font-semibold text-sm tracking-wide text-[#FDFBF7]">Solutions & Portals</h4>
             <ul className="flex flex-col gap-3">
               <FooterLink href="/solutions">Industry Mapping</FooterLink>
-              <FooterLink href="/recruiters">For Recruiters</FooterLink>
-              <FooterLink href="/candidates">For Candidates</FooterLink>
+              <FooterLink href="/early-contributors/recruiters">For Recruiters</FooterLink>
+              <FooterLink href="/early-contributors/candidates">For Candidates</FooterLink>
               <FooterLink href="/legal">Legal & Privacy</FooterLink>
             </ul>
           </div>
