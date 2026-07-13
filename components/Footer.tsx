@@ -102,7 +102,7 @@ export default function Footer() {
           <div className="flex flex-col gap-5">
             <h4 className="font-semibold text-sm tracking-wide text-[#FDFBF7]">Product</h4>
             <ul className="flex flex-col gap-3">
-              <FooterLink href="product/how-it-works/recruiting">How It Works</FooterLink>
+              <FooterLink href="/product/how-it-works">How It Works</FooterLink>
               <FooterLink href="/pricing">Pricing</FooterLink>
               <FooterLink href="/investors">Investor Network</FooterLink>
               <FooterLink href="/beta">Beta Access</FooterLink>

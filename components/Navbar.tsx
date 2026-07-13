@@ -12,7 +12,7 @@ import { ChevronDown } from "lucide-react";
 const NAV_DATA = {
   product: {
     products: [
-      { name: "How It Works", href: "/product/how-it-works/recruiting" },
+      { name: "How It Works", href: "/product/how-it-works" },
       { name: "Pricing", href: "/pricing" },
       { name: "Investor Network", href: "/investors" },
     ],
