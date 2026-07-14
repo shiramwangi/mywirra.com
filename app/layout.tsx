@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import CookieBar from "@/components/CookieBar";
+import MarketingLayout from "@/components/MarketingLayout";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 

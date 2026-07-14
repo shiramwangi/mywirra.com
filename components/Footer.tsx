@@ -95,7 +95,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               <FooterLink href="/company/who-we-are">Who We Are</FooterLink>
               <FooterLink href="/why-wirra">Why Wirra</FooterLink>
-              <FooterLink href="/customers">Customers</FooterLink>
+              <FooterLink href="/success">Customers</FooterLink>
             </ul>
           </div>
 
